@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Darussalam Admin</title>
+<style>
+:root{--g:#C9A84C;--g2:#E8D08A;--dk:#06101A;--pn:#0D1B2B;--p2:rgba(255,255,255,0.04);--bd:rgba(201,168,76,0.2);--tx:#F0E6C8;--t2:rgba(240,230,200,0.55);--gr:#4CAF80;--rd:#E07070;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--dk);color:var(--tx);font-family:Georgia,serif;min-height:100vh;}
+/* LOGIN */
+#LS{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}
+.lb{width:100%;max-width:370px;background:var(--pn);border:1px solid var(--bd);border-radius:20px;padding:32px 26px;}
+.la{font-size:1.8rem;color:var(--g);text-align:center;}
+.le{font-size:0.85rem;font-weight:bold;text-align:center;margin-top:4px;}
+.ls{font-size:0.65rem;letter-spacing:3px;text-transform:uppercase;color:var(--t2);text-align:center;margin-top:4px;margin-bottom:24px;}
+.lbl{font-size:0.65rem;letter-spacing:2px;text-transform:uppercase;color:var(--t2);margin-bottom:5px;display:block;margin-top:10px;}
+.inp{width:100%;background:rgba(255,255,255,0.05);border:1px solid var(--bd);border-radius:8px;padding:11px 13px;color:var(--tx);font-size:1rem;outline:none;font-family:Georgia,serif;}
+.inp:focus{border-color:var(--g);}
+.inp::placeholder{color:var(--t2);}
+.lbtn{width:100%;background:var(--g);color:var(--dk);border:none;border-radius:10px;padding:13px;font-size:1rem;font-weight:bold;cursor:pointer;margin-top:14px;font-family:Georgia,serif;}
+.lbtn:hover{background:var(--g2);}
+.lerr{color:var(--rd);font-size:0.82rem;text-align:center;margin-top:9px;padding:8px;background:rgba(224,112,112,0.08);border-radius:7px;display:none;}
+.lhint{background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.2);border-radius:8px;padding:10px;margin-top:12px;font-size:0.8rem;color:var(--t2);text-align:center;line-height:1.8;}
+.lhint b{color:var(--g);}
+/* DASHBOARD */
+#DS{display:none;}
+.tb{height:3px;background:linear-gradient(90deg,transparent,var(--g),transparent);}
+.dh{padding:12px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--bd);background:linear-gradient(180deg,rgba(201,168,76,0.06),transparent);}
+.dn-a{font-size:1.05rem;color:var(--g);}
+.dn-e{font-size:0.8rem;margin-top:2px;}
+.out{background:rgba(224,112,112,0.1);border:1px solid rgba(224,112,112,0.25);color:var(--rd);border-radius:8px;padding:6px 12px;font-size:0.75rem;cursor:pointer;font-family:Georgia,serif;}
+nav{display:flex;overflow-x:auto;background:var(--pn);border-bottom:1px solid var(--bd);scrollbar-width:none;}
+nav::-webkit-scrollbar{display:none;}
+.nb{flex:0 0 auto;padding:10px 16px;font-size:0.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--t2);background:none;border:none;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;font-family:Georgia,serif;transition:all .2s;}
+.nb.on{color:var(--g);border-bottom-color:var(--g);}
+.bdy{max-width:860px;margin:0 auto;padding:16px 14px;}
+.pg{display:none;}.pg.on{display:block;}
+/* STAT */
+.sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin-bottom:16px;}
+.sc{background:var(--p2);border:1px solid var(--bd);border-radius:11px;padding:12px;text-align:center;}
+.sv{font-size:1.5rem;font-weight:300;color:var(--g);}
+.sl{font-size:0.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--t2);margin-top:3px;}
+/* SECTION TITLE */
+.st{font-size:0.63rem;letter-spacing:3px;text-transform:uppercase;color:var(--t2);margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--bd);margin-top:16px;}
+.st:first-child{margin-top:0;}
+/* PRAYER GRID */
+.pg2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+@media(min-width:520px){.pg2{grid-template-columns:repeat(3,1fr);}}
+.pc{background:var(--p2);border:1px solid var(--bd);border-radius:11px;padding:11px;}
+.pn{font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--t2);margin-bottom:5px;}
+.pti{width:100%;background:rgba(255,255,255,0.05);border:1px solid var(--bd);border-radius:6px;padding:7px 8px;color:var(--tx);font-size:0.9rem;outline:none;text-align:center;font-family:Georgia,serif;}
+.pti:focus{border-color:var(--g);}
+.ofr{display:flex;align-items:center;gap:3px;margin-top:5px;}
+.ofl{font-size:0.58rem;color:var(--t2);}
+.ofi{width:44px;background:rgba(255,255,255,0.05);border:1px solid rgba(232,208,138,0.3);border-radius:5px;padding:3px 4px;color:var(--g2);font-size:0.78rem;outline:none;text-align:center;font-family:Georgia,serif;}
+.iqr{display:flex;align-items:center;gap:3px;margin-top:4px;}
+.iql{font-size:0.57rem;color:var(--t2);}
+.iqi{width:40px;background:rgba(255,255,255,0.05);border:1px solid rgba(76,175,128,0.3);border-radius:5px;padding:3px 4px;color:var(--gr);font-size:0.78rem;outline:none;text-align:center;}
+/* BUTTONS */
+.sb{background:var(--g);color:var(--dk);border:none;border-radius:9px;padding:10px 18px;font-size:0.85rem;font-weight:bold;cursor:pointer;font-family:Georgia,serif;}
+.sb:hover{background:var(--g2);}
+.gb{background:rgba(201,168,76,0.1);color:var(--g);border:1px solid var(--bd);border-radius:9px;padding:8px 16px;font-size:0.82rem;cursor:pointer;font-family:Georgia,serif;}
+.db{background:rgba(224,112,112,0.1);border:1px solid rgba(224,112,112,0.25);color:var(--rd);border-radius:7px;padding:5px 9px;font-size:0.7rem;cursor:pointer;font-family:Georgia,serif;}
+/* FORM */
+.fi{width:100%;background:rgba(255,255,255,0.05);border:1px solid var(--bd);border-radius:8px;padding:9px 11px;color:var(--tx);font-size:0.88rem;outline:none;margin-bottom:9px;font-family:Georgia,serif;}
+.fi:focus{border-color:var(--g);}
+.fi::placeholder{color:var(--t2);}
+textarea.fi{resize:vertical;min-height:68px;line-height:1.6;}
+select.fi{cursor:pointer;background:var(--pn);}
+/* TOGGLE */
+.tr{display:flex;justify-content:space-between;align-items:center;background:var(--p2);border:1px solid var(--bd);border-radius:11px;padding:11px 14px;margin-bottom:8px;}
+.tgl{width:44px;height:24px;border-radius:12px;border:none;cursor:pointer;background:rgba(255,255,255,0.1);position:relative;transition:background .3s;flex-shrink:0;}
+.tgl.on{background:var(--g);}
+.tgl::after{content:'';position:absolute;width:18px;height:18px;border-radius:50%;background:#fff;top:3px;left:3px;transition:transform .3s;}
+.tgl.on::after{transform:translateX(20px);}
+/* ANN */
+.ae{background:var(--p2);border:1px solid var(--bd);border-radius:11px;padding:11px 13px;margin-bottom:7px;display:flex;justify-content:space-between;align-items:flex-start;gap:9px;}
+.abg{display:inline-block;padding:2px 7px;border-radius:20px;font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;background:rgba(201,168,76,0.13);color:var(--g);margin-bottom:3px;}
+.at{font-size:0.88rem;font-weight:bold;color:var(--g);}
+.ab{font-size:0.8rem;color:var(--tx);margin-top:3px;line-height:1.5;}
+.ad{font-size:0.63rem;color:var(--t2);margin-top:3px;}
+/* OVERVIEW PRAYER */
+.op{display:flex;justify-content:space-between;align-items:center;background:var(--p2);border:1px solid var(--bd);border-radius:9px;padding:9px 12px;margin-bottom:6px;}
+/* MIC */
+.mw{background:var(--p2);border:1px solid var(--bd);border-radius:13px;padding:17px;margin-top:4px;}
+.mi{font-size:0.8rem;color:var(--t2);line-height:1.65;margin-bottom:12px;}
+.ms{font-size:0.8rem;color:var(--t2);background:rgba(255,255,255,0.03);border:1px solid var(--bd);border-radius:8px;padding:9px 11px;min-height:38px;margin-bottom:9px;line-height:1.5;}
+.mt{font-size:1.4rem;font-weight:300;color:var(--g);letter-spacing:4px;text-align:center;margin-bottom:8px;display:none;}
+.wv{height:56px;background:rgba(0,0,0,0.25);border:1px solid var(--bd);border-radius:7px;margin-bottom:9px;display:none;overflow:hidden;}
+.wv canvas{width:100%;height:100%;display:block;}
+.mbtn{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;padding:11px;border-radius:10px;border:2px solid;font-size:0.88rem;font-weight:bold;cursor:pointer;font-family:Georgia,serif;margin-bottom:7px;transition:all .25s;}
+.mr{border-color:var(--g);color:var(--g);background:rgba(201,168,76,0.08);}
+.mr:hover{background:rgba(201,168,76,0.18);}
+.msp{border-color:var(--rd);color:var(--rd);background:rgba(224,112,112,0.08);display:none;}
+.mp{border-color:var(--gr);color:var(--gr);background:rgba(76,175,128,0.08);display:none;}
+.mv{background:var(--g);color:var(--dk);border-color:var(--g);display:none;}
+.rd{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--rd);animation:rd .6s ease-in-out infinite;}
+@keyframes rd{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.4;transform:scale(1.4);}}
+.sbox{background:rgba(76,175,128,0.07);border:1px solid rgba(76,175,128,0.3);border-radius:9px;padding:12px;display:none;margin-top:7px;}
+.sbt{font-size:0.63rem;letter-spacing:2px;text-transform:uppercase;color:var(--gr);margin-bottom:6px;}
+audio{width:100%;border-radius:6px;margin-top:5px;}
+/* LIVE MIC */
+.live-mic-box{background:linear-gradient(135deg,rgba(224,112,112,0.1),rgba(224,112,112,0.03));border:1px solid rgba(224,112,112,0.35);border-radius:13px;padding:17px;margin-top:4px;}
+.live-mic-title{font-size:0.75rem;letter-spacing:2px;text-transform:uppercase;color:var(--rd);margin-bottom:9px;}
+.live-pulse{display:inline-block;width:12px;height:12px;border-radius:50%;background:var(--rd);animation:rd .5s ease-in-out infinite;}
+.lm-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;border-radius:11px;font-size:1rem;font-weight:bold;cursor:pointer;font-family:Georgia,serif;transition:all .3s;border:none;}
+.lm-start{background:var(--rd);color:#fff;}
+.lm-start:hover{background:#c05050;}
+.lm-stop{background:rgba(224,112,112,0.15);border:2px solid var(--rd);color:var(--rd);display:none;}
+.lm-status{font-size:0.8rem;color:var(--t2);text-align:center;margin-top:8px;padding:7px;background:rgba(255,255,255,0.03);border-radius:7px;}
+/* TOAST */
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(60px);background:var(--gr);color:#fff;padding:10px 20px;border-radius:9px;font-size:0.84rem;opacity:0;transition:all .3s;z-index:9999;pointer-events:none;}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+
+<div id="LS">
+  <div class="lb">
+    <div class="la">مسجد دارالسلام</div>
+    <div class="le">Masjid Darussalam</div>
+    <div class="ls">Admin Dashboard</div>
+    <label class="lbl">Username</label>
+    <input class="inp" type="text" id="uIn" placeholder="admin" autocomplete="off" spellcheck="false">
+    <label class="lbl">Password</label>
+    <input class="inp" type="password" id="pIn" placeholder="darussalam123" autocomplete="off">
+    <button class="lbtn" id="loginBtn">Login to Dashboard</button>
+    <div class="lerr" id="lerr">Wrong username or password.</div>
+
+  </div>
+</div>
+
+<div id="DS">
+  <div class="tb"></div>
+  <div class="dh">
+    <div><div class="dn-a">مسجد دارالسلام</div><div class="dn-e">Admin Dashboard</div></div>
+    <button class="out" id="outBtn">Logout</button>
+  </div>
+  <nav>
+    <button class="nb on" id="t-ov">📊 Overview</button>
+    <button class="nb" id="t-pr">🕌 Prayers</button>
+    <button class="nb" id="t-an">📢 Notices</button>
+    <button class="nb" id="t-st">⚙ Settings</button>
+  </nav>
+  <div class="bdy">
+
+    <!-- OVERVIEW -->
+    <div class="pg on" id="p-ov">
+      <div class="sg">
+        <div class="sc"><div class="sv" id="ov1">—</div><div class="sl">Next Prayer</div></div>
+        <div class="sc"><div class="sv" id="ov2">—</div><div class="sl">Remaining</div></div>
+        <div class="sc"><div class="sv" id="ov3">0</div><div class="sl">Notices</div></div>
+        <div class="sc"><div class="sv" id="ov4">Murud</div><div class="sl">City</div></div>
+      </div>
+      <div class="st">Prayer Schedule</div>
+      <div id="ovList"></div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;">
+        <button class="sb" id="goAn">+ Announcement</button>
+        <button class="gb" id="goPr">Edit Prayers</button>
+      </div>
+    </div>
+
+    <!-- PRAYERS -->
+    <div class="pg" id="p-pr">
+      <!-- City & Calculation hidden as requested -->
+      <div style="display:none">
+        <input class="fi" type="text" id="cityF" value="Murud-Janjira">
+        <select class="fi" id="methF">
+          <option value="1" selected>Karachi</option>
+        </select>
+        <button class="sb" id="fetchBtn">Fetch</button>
+      </div>
+      <div class="st">Prayer Times + Offset + Iqamah</div>
+      <div style="font-size:0.75rem;color:var(--t2);margin-bottom:9px;">
+        <b style="color:var(--g2)">Change by ±min</b> — adjust time for local Murud conditions (e.g. +2 or -3). Iqamah = minutes after Adhan before salah begins.
+      </div>
+      <div class="pg2" id="ptGrid"></div>
+      <div class="st">Jumu'ah Times</div>
+      <div class="pg2">
+        <div class="pc"><div class="pn">Khutbah 1</div><input class="pti" type="time" id="j1" value="12:15"></div>
+        <div class="pc"><div class="pn">Khutbah 2</div><input class="pti" type="time" id="j2" value="12:30"></div>
+        <div class="pc"><div class="pn">Jumu'ah Salah</div><input class="pti" type="time" id="j3" value="12:45"></div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:4px;">
+        <button class="sb" id="savePr">💾 Save & Sync to App</button>
+      </div>
+    </div>
+
+    <!-- ANNOUNCEMENTS -->
+    <div class="pg" id="p-an">
+      <div class="st">New Announcement</div>
+      <div style="background:var(--p2);border:1px solid var(--bd);border-radius:12px;padding:14px;margin-bottom:14px;">
+        <label class="lbl" style="margin-top:0">Title</label>
+        <input class="fi" type="text" id="aT" placeholder="Title...">
+        <label class="lbl">Message</label>
+        <textarea class="fi" id="aB" rows="4" placeholder="Message..."></textarea>
+        <label class="lbl">Badge</label>
+        <input class="fi" type="text" id="aBg" placeholder="Important / Event / Ramadan / Donation">
+        <button class="sb" id="addAn">📢 Publish to App</button>
+      </div>
+      <div class="st">All Announcements</div>
+      <div id="anList"></div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div class="pg" id="p-st">
+      <div class="st">Azan Mode</div>
+      <div class="tr">
+        <div><div style="font-size:0.88rem;">🔔 Automatic Azan</div><div style="font-size:0.68rem;color:var(--t2);margin-top:2px;">App plays azan at prayer time automatically</div></div>
+        <button class="tgl on" id="mAuto"></button>
+      </div>
+      <div class="tr" id="manualRow">
+        <div><div style="font-size:0.88rem;">✋ Manual Mode — Muazzin Control</div><div style="font-size:0.68rem;color:var(--t2);margin-top:2px;">Muazzin gives azan manually from this device</div></div>
+        <button class="tgl" id="mManual"></button>
+      </div>
+
+      <div id="manualPanel" style="display:none;">
+        <div class="st">🔊 Manual Azan Trigger (Imam)</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;" id="manTrigs"></div>
+
+        <div class="st">🎙️ Live Mic — Muazzin Voice to All Users</div>
+        <div class="live-mic-box">
+          <div class="live-mic-title">🔴 LIVE BROADCAST — Muazzin Mic</div>
+          <div style="font-size:0.8rem;color:var(--t2);line-height:1.7;margin-bottom:12px;">
+            Press <b style="color:var(--rd)">🎙️ Mic ON</b> to start calling Azan live. Your voice goes to all users on the app instantly. Press <b style="color:var(--rd)">Mic OFF</b> to stop.
+            <div style="margin-top:7px;background:rgba(201,168,76,0.08);border-radius:7px;padding:8px;font-size:0.75rem;color:var(--g2);">
+              📡 <b>Same device:</b> Instant via browser channel<br>
+              📡 <b>Cross-device/network:</b> Via PeerJS WebRTC (internet required)<br>
+              🔔 Users see <em>"Muazzin is calling Azan LIVE"</em> notification
+            </div>
+          </div>
+          <div class="lm-status" id="lmSt">🎙️ Mic is OFF — Press Mic ON to start Azan</div>
+          <div style="margin-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:9px;">
+            <button class="lm-btn lm-start" id="lmStart">🎙️ Mic ON — Go Live</button>
+            <button class="lm-btn lm-stop" id="lmStop" style="display:none;">🔴 Mic OFF — Stop</button>
+          </div>
+          <div id="peerStatus" style="font-size:0.72rem;color:var(--t2);margin-top:8px;text-align:center;display:none;"></div>
+        </div>
+      </div>
+
+      <div class="st" style="margin-top:18px;">Record Muazzin Azan</div>
+      <div class="mw">
+        <div class="mi">Record the local Muazzin's azan. Saved recording plays in user app when <b style="color:var(--g)">Darussalam Local</b> is selected.</div>
+        <div class="ms" id="micSt">Press Start Recording to begin.</div>
+        <div class="mt" id="micTmr">0:00</div>
+        <div class="wv" id="micWv"><canvas id="wvC" width="700" height="56"></canvas></div>
+        <button class="mbtn mr" id="bR">🎙️ Start Recording Azan</button>
+        <button class="mbtn msp" id="bS">⏹ Stop Recording</button>
+        <audio id="pAud" controls style="display:none;width:100%;margin-bottom:7px;"></audio>
+        <button class="mbtn mp" id="bP">▶ Preview</button>
+        <button class="mbtn mv" id="bV">💾 Save as Darussalam Azan</button>
+        <div class="sbox" id="sbox">
+          <div class="sbt">✅ Saved — Darussalam Local Azan Active</div>
+          <audio id="sAud" controls style="width:100%;"></audio>
+          <button style="width:100%;background:rgba(224,112,112,0.08);border:1px solid rgba(224,112,112,0.25);color:var(--rd);border-radius:7px;padding:8px;cursor:pointer;font-family:Georgia,serif;font-size:0.8rem;margin-top:7px;" id="delR">🗑️ Delete Recording</button>
+        </div>
+      </div>
+
+      <div class="st" style="margin-top:18px;">Masjid Settings</div>
+      <label class="lbl" style="margin-top:0">Masjid Display Name</label>
+      <input class="fi" id="msN" type="text" value="Masjid Darussalam">
+      <button class="sb" id="saveSt">💾 Save Name</button>
+
+      <div class="st" style="margin-top:18px;">Change Admin Password</div>
+      <input class="fi" type="password" id="nPas" placeholder="New password (min 4 chars)" style="margin-top:0;">
+      <button class="sb" id="chPas">🔒 Update Password</button>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var PK='ds_pass', DK='ds_data', RK='ds_rec', BCK='ds_broadcast';
+var DU='admin', DP='darussalam123';
+// Clear any old saved password so default credentials always work
+try{localStorage.removeItem(PK);}catch(e){}
+
+// ---- DATA ----
+var A={
+  city:'Murud-Janjira', method:'1', lat:18.3024, lon:72.9750,
+  masjidName:'Masjid Darussalam', manualMode:false,
+  prayers:{Fajr:'05:15',Sunrise:'06:35',Dhuhr:'12:36',Asr:'16:05',Maghrib:'18:38',Isha:'19:52'},
+  offsets:{Fajr:0,Sunrise:0,Dhuhr:0,Asr:0,Maghrib:0,Isha:0},
+  iqama:{Fajr:20,Dhuhr:15,Asr:15,Maghrib:10,Isha:15},
+  jumuah:{khutbah1:'12:15',khutbah2:'12:30',salah:'12:45'},
+  announcements:[
+    {title:'Eid Al-Fitr Announcement',body:'Eid prayer at 7:00 AM. All welcome.',date:'Today',badge:'Important'},
+    {title:'Weekly Halaqa — Sunday',body:'After Isha. Topic: Surah Al-Kahf.',date:'Yesterday',badge:'Event'}
+  ]
+};
+
+function ld(){try{var d=localStorage.getItem(DK);if(d){var p=JSON.parse(d);if(p&&p.prayers)A=p;}}catch(e){}}
+function sv(){
+  try{localStorage.setItem(DK,JSON.stringify(A));}catch(e){}
+  try{localStorage.setItem('ds_sync',Date.now().toString());}catch(e){}
+  cloudPush();
+  toast('Saved ✓');
+}
+function getCloudId(){localStorage.setItem('jbin_id','69a5787dd0ea881f40e74a09');return '69a5787dd0ea881f40e74a09';}
+function cloudPush(){
+  var id=getCloudId();
+  var payload=JSON.stringify({data:JSON.stringify(A),ts:Date.now()});
+  var ss=document.getElementById('sync-status');
+  if(ss)ss.textContent='☁️ Syncing...';
+  if(id){
+    fetch('https://api.jsonbin.io/v3/b/'+id,{method:'PUT',headers:{'Content-Type':'application/json','X-Master-Key':localStorage.getItem('jbin_key')||''},body:payload})
+    .then(function(r){return r.json();}).then(function(){if(ss){ss.textContent='☁️ Synced ✓';ss.style.color='#4CAF50';}})
+    .catch(function(){if(ss){ss.textContent='❌ Sync failed';ss.style.color='#f44336';}});
+  } else {
+    var key=localStorage.getItem('jbin_key')||'';
+    if(!key){showSetup();return;}
+    fetch('https://api.jsonbin.io/v3/b',{method:'POST',headers:{'Content-Type':'application/json','X-Master-Key':key,'X-Bin-Name':'masjid-data','X-Bin-Private':'false'},body:payload})
+    .then(function(r){return r.json()}).then(function(r){
+      if(r.metadata&&r.metadata.id){
+        localStorage.setItem('jbin_id',r.metadata.id);
+        if(ss){ss.textContent='☁️ Synced ✓ — BIN ID: '+r.metadata.id;ss.style.color='#4CAF50';}
+        alert('Cloud Sync Setup!\n\nYour Bin ID: '+r.metadata.id+'\n\nCopy this ID and enter it in the Masjid App settings.');
+      }
+    }).catch(function(){if(ss){ss.textContent='❌ Sync failed';ss.style.color='#f44336';}});
+  }
+}
+function showSetup(){
+  var key=prompt('Enter your JSONBin.io API Key:\n\n1. Go to jsonbin.io\n2. Create free account\n3. Go to API Keys\n4. Copy your Master Key');
+  if(key){localStorage.setItem('jbin_key',key);cloudPush();}
+}
+function loadCloudId(){var id=getCloudId();var el=document.getElementById('sync-status');if(id&&el)el.textContent='☁️ Bin: '+id;}
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.className='toast on';setTimeout(function(){t.className='toast';},2500);}
+function fmt12(t){
+  if(!t||t==='—')return'—';
+  var p=t.split(':'),h=parseInt(p[0]),m=parseInt(p[1]);
+  if(isNaN(h)||isNaN(m))return t;
+  return(h%12||12)+':'+(m<10?'0':'')+m+' '+(h>=12?'PM':'AM');
+}
+function addMin(t,off){
+  if(!t||!off)return t;
+  var p=t.split(':'),h=parseInt(p[0]),m=parseInt(p[1])+parseInt(off||0);
+  h+=Math.floor(m/60);m=((m%60)+60)%60;h=((h%24)+24)%24;
+  return(h<10?'0':'')+h+':'+(m<10?'0':'')+m;
+}
+
+// ---- LOGIN ----
+document.getElementById('loginBtn').onclick=doLogin;
+document.getElementById('pIn').onkeydown=function(e){if(e.key==='Enter')doLogin();};
+document.getElementById('uIn').onkeydown=function(e){if(e.key==='Enter')document.getElementById('pIn').focus();};
+document.getElementById('outBtn').onclick=function(){
+  document.getElementById('LS').style.display='flex';
+  document.getElementById('DS').style.display='none';
+  document.getElementById('uIn').value='';document.getElementById('pIn').value='';
+};
+
+function doLogin(){
+  var u=(document.getElementById('uIn').value||'').trim();
+  var p=(document.getElementById('pIn').value||'');
+  var sp='';try{sp=localStorage.getItem(PK)||'';}catch(e){}
+  var cp=sp||DP;
+  var err=document.getElementById('lerr');err.style.display='none';
+  if(u===DU&&p===cp){
+    document.getElementById('LS').style.display='none';
+    document.getElementById('DS').style.display='block';
+    ld();loadCloudId();initDash();
+  }else{
+    err.style.display='block';
+    err.textContent='Wrong username or password. Please try again.';
+    document.getElementById('pIn').value='';document.getElementById('pIn').focus();
+  }
+}
+
+// ---- TABS ----
+['ov','pr','an','st'].forEach(function(id){
+  document.getElementById('t-'+id).onclick=function(){
+    document.querySelectorAll('.pg').forEach(function(d){d.classList.remove('on');});
+    document.querySelectorAll('.nb').forEach(function(b){b.classList.remove('on');});
+    document.getElementById('p-'+id).classList.add('on');
+    document.getElementById('t-'+id).classList.add('on');
+    if(id==='ov')renderOv();
+  };
+});
+document.getElementById('goAn').onclick=function(){document.getElementById('t-an').click();};
+document.getElementById('goPr').onclick=function(){document.getElementById('t-pr').click();};
+
+// ---- INIT ----
+function initDash(){
+  document.getElementById('cityF').value=A.city||'Murud-Janjira';
+  document.getElementById('msN').value=A.masjidName||'Masjid Darussalam';
+  document.getElementById('j1').value=A.jumuah.khutbah1||'12:15';
+  document.getElementById('j2').value=A.jumuah.khutbah2||'12:30';
+  document.getElementById('j3').value=A.jumuah.salah||'12:45';
+  if(A.manualMode){document.getElementById('mManual').classList.add('on');document.getElementById('manualPanel').style.display='block';}
+  renderPtGrid();renderAnns();renderOv();renderManTrigs();loadSavedRec();
+}
+
+// ---- OVERVIEW ----
+function renderOv(){
+  var prs=['Fajr','Dhuhr','Asr','Maghrib','Isha'];
+  var now=new Date(),nm=now.getHours()*60+now.getMinutes();
+  var nx='—',df='—';
+  for(var i=0;i<prs.length;i++){
+    var k=prs[i],t=addMin(A.prayers[k],A.offsets[k])||'00:00';
+    var sp=t.split(':'),pm=parseInt(sp[0])*60+parseInt(sp[1]);
+    if(pm>nm){nx=k;var d=pm-nm;df=Math.floor(d/60)+'h '+d%60+'m';break;}
+  }
+  document.getElementById('ov1').textContent=nx;
+  document.getElementById('ov2').textContent=df;
+  document.getElementById('ov3').textContent=A.announcements.length;
+  document.getElementById('ov4').textContent=(A.city||'Murud').split('-')[0];
+  var ic={Fajr:'🌙',Sunrise:'🌅',Dhuhr:'☀️',Asr:'🌤️',Maghrib:'🌇',Isha:'🌃'};
+  var h='';
+  ['Fajr','Sunrise','Dhuhr','Asr','Maghrib','Isha'].forEach(function(p){
+    var isN=(p===nx),ft=addMin(A.prayers[p],A.offsets[p]);
+    h+='<div class="op"><div style="display:flex;align-items:center;gap:8px;"><span>'+(ic[p]||'·')+'</span>'
+      +'<div><div style="font-weight:bold;color:'+(isN?'var(--g)':'var(--tx)')+'">'+p+'</div>'
+      +(A.iqama[p]?'<div style="font-size:0.68rem;color:var(--gr)">Iqamah +'+A.iqama[p]+'m</div>':'')
+      +'</div></div><div style="color:'+(isN?'var(--g)':'var(--tx)')+'">'+fmt12(ft||'—')+'</div></div>';
+  });
+  document.getElementById('ovList').innerHTML=h;
+}
+
+// ---- PRAYER GRID ----
+function renderPtGrid(){
+  var prs=['Fajr','Sunrise','Dhuhr','Asr','Maghrib','Isha'];
+  var h='';
+  prs.forEach(function(p){
+    var raw=A.prayers[p]||'';
+    var disp=raw?fmt12(raw):'-- : --';
+    h+='<div class="pc"><div class="pn">'+p+'</div>'
+      +'<div id="ptd_'+p+'" style="font-size:1.05rem;font-weight:bold;color:var(--g2);text-align:center;padding:4px 0 2px;">'+disp+'</div>'
+      +'<input class="pti" type="time" id="pt_'+p+'" value="'+raw+'" onchange="onPtChange(this)">'
+      +'<div class="ofr"><span class="ofl">offset:</span>'
+      +'<input class="ofi" type="number" id="of_'+p+'" value="'+(A.offsets[p]||0)+'" min="-60" max="60">'
+      +'<span class="ofl">min</span></div>'
+      +'<div class="iqr"><span class="iql">Iqamah+</span>'
+      +'<input class="iqi" type="number" id="iq_'+p+'" value="'+(A.iqama[p]||0)+'" min="0" max="90">'
+      +'<span class="iql">m</span></div></div>';
+  });
+  document.getElementById('ptGrid').innerHTML=h;
+}
+function onPtChange(el){
+  var id=el.id.replace('pt_','');
+  var d=document.getElementById('ptd_'+id);
+  if(d)d.textContent=el.value?fmt12(el.value):'-- : --';
+}
+
+document.getElementById('fetchBtn').onclick=function(){
+  var city=document.getElementById('cityF').value.trim()||'Murud-Janjira';
+  var meth=document.getElementById('methF').value||'1';
+  A.city=city;A.method=meth;
+  // Use coordinates for Murud-Janjira for precision; API by city name for others
+  var url;
+  if(city.toLowerCase().includes('murud')||city.toLowerCase().includes('janjira')){
+    url='https://api.aladhan.com/v1/timings?latitude=18.3024&longitude=72.9750&method='+meth+'&school=1';
+  } else {
+    url='https://api.aladhan.com/v1/timingsByCity?city='+encodeURIComponent(city)+'&country=India&method='+meth+'&school=1';
+  }
+  var btn=document.getElementById('fetchBtn');btn.textContent='Fetching...';btn.disabled=true;
+  var x=new XMLHttpRequest();
+  x.open('GET',url,true);
+  x.timeout=10000;
+  x.onload=function(){
+    btn.textContent='Fetch';btn.disabled=false;
+    if(x.status===200){try{
+      var d=JSON.parse(x.responseText);
+      if(d.code===200){
+        var t=d.data.timings;
+        ['Fajr','Sunrise','Dhuhr','Asr','Maghrib','Isha'].forEach(function(k){if(t[k])A.prayers[k]=t[k].substring(0,5);});
+        renderPtGrid();renderOv();
+        // Auto-save to sync with user app
+        sv();
+        toast('✅ Times fetched & synced for '+city);
+      }
+    }catch(e){toast('Parse error');}}else toast('Failed — check city name');
+  };
+  x.ontimeout=function(){btn.textContent='Fetch';btn.disabled=false;toast('Timeout — check internet');};
+  x.onerror=function(){btn.textContent='Fetch';btn.disabled=false;toast('Network error');};
+  x.send();
+};
+
+document.getElementById('savePr').onclick=function(){
+  ['Fajr','Sunrise','Dhuhr','Asr','Maghrib','Isha'].forEach(function(p){
+    var v=document.getElementById('pt_'+p).value;if(v)A.prayers[p]=v;
+    A.offsets[p]=parseInt(document.getElementById('of_'+p).value)||0;
+    A.iqama[p]=parseInt(document.getElementById('iq_'+p).value)||0;
+  });
+  A.jumuah={khutbah1:document.getElementById('j1').value,khutbah2:document.getElementById('j2').value,salah:document.getElementById('j3').value};
+  sv();
+};
+
+// ---- ANNOUNCEMENTS ----
+document.getElementById('addAn').onclick=function(){
+  var t=document.getElementById('aT').value.trim();
+  var b=document.getElementById('aB').value.trim();
+  var bg=document.getElementById('aBg').value.trim();
+  if(!t||!b){toast('Fill title and message');return;}
+  A.announcements.unshift({title:t,body:b,badge:bg,date:'Just now'});
+  document.getElementById('aT').value='';document.getElementById('aB').value='';document.getElementById('aBg').value='';
+  sv();renderAnns();
+};
+function renderAnns(){
+  var h='';
+  if(!A.announcements.length){h='<div style="color:var(--t2);text-align:center;padding:16px;">No announcements.</div>';}
+  else A.announcements.forEach(function(a,i){
+    h+='<div class="ae"><div>'+(a.badge?'<span class="abg">'+a.badge+'</span><br>':'')
+      +'<div class="at">'+a.title+'</div><div class="ab">'+a.body+'</div>'
+      +'<div class="ad">'+a.date+'</div></div>'
+      +'<button class="db" onclick="delAn('+i+')">🗑</button></div>';
+  });
+  document.getElementById('anList').innerHTML=h;
+}
+function delAn(i){if(confirm('Delete?')){A.announcements.splice(i,1);sv();renderAnns();}}
+
+// ---- SETTINGS ----
+document.getElementById('mAuto').onclick=function(){this.classList.toggle('on');};
+document.getElementById('mManual').onclick=function(){
+  this.classList.toggle('on');
+  A.manualMode=this.classList.contains('on');
+  document.getElementById('manualPanel').style.display=A.manualMode?'block':'none';
+  sv();
+};
+document.getElementById('saveSt').onclick=function(){
+  A.masjidName=document.getElementById('msN').value.trim()||'Masjid Darussalam';sv();
+};
+document.getElementById('chPas').onclick=function(){
+  var np=document.getElementById('nPas').value.trim();
+  if(!np||np.length<4){toast('Min 4 chars');return;}
+  try{localStorage.setItem(PK,np);}catch(e){}
+  document.getElementById('nPas').value='';toast('Password updated');
+};
+function renderManTrigs(){
+  var h='';
+  ['Fajr','Dhuhr','Asr','Maghrib','Isha'].forEach(function(p){
+    h+='<button class="gb" onclick="manTrig(\''+p+'\')">🔊 '+p+'</button>';
+  });
+  document.getElementById('manTrigs').innerHTML=h;
+}
+function manTrig(p){
+  try{localStorage.setItem('ds_azan_trigger',JSON.stringify({prayer:p,ts:Date.now()}));}catch(e){}
+  toast(p+' Azan triggered in app');
+}
+
+// ---- LIVE MIC BROADCAST (BroadcastChannel + PeerJS) ----
+var _lmStream=null,_lmMR=null,_lmActive=false;
+
+// Cross-device live mic uses BroadcastChannel + localStorage
+function initAdminPeer(){}
+
+document.getElementById('lmStart').onclick=startLiveMic;
+document.getElementById('lmStop').onclick=stopLiveMic;
+
+function startLiveMic(){
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){
+    setLmSt('❌ Microphone not supported. Use Chrome or Firefox.');return;
+  }
+  navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false,sampleRate:44100},video:false})
+  .then(function(stream){
+    _lmStream=stream;_lmActive=true;
+    document.getElementById('lmStart').style.display='none';
+    document.getElementById('lmStop').style.display='flex';
+    setLmSt('<span class="live-pulse"></span> 🔴 MIC ON — Broadcasting Azan LIVE to all users');
+
+    // Signal same-browser tabs via BroadcastChannel
+    try{
+      var bc=new BroadcastChannel('ds_masjid');
+      bc.postMessage({type:'live_start',muazzin:'Darussalam Muazzin'});
+    }catch(e){}
+    // Signal via localStorage (cross-tab fallback)
+    try{localStorage.setItem('ds_live_start',JSON.stringify({ts:Date.now(),muazzin:'Darussalam Muazzin'}));}catch(e){}
+
+    // Broadcast audio chunks via MediaRecorder → localStorage → user app
+    var opts={};
+    ['audio/webm;codecs=opus','audio/webm','audio/ogg'].forEach(function(tp){
+      if(!opts.mimeType&&typeof MediaRecorder!=='undefined'&&MediaRecorder.isTypeSupported(tp))opts={mimeType:tp};
+    });
+    try{
+      _lmMR=new MediaRecorder(stream,opts);
+      _lmMR.ondataavailable=function(e){
+        if(!_lmActive||!e.data||!e.data.size)return;
+        var rd=new FileReader();
+        rd.onload=function(ev){
+          var chunk={ts:Date.now(),data:ev.target.result};
+          try{localStorage.setItem('ds_live_chunk',JSON.stringify(chunk));}catch(ex){}
+          try{var bc2=new BroadcastChannel('ds_masjid');bc2.postMessage({type:'live_chunk',data:ev.target.result});bc2.close();}catch(ex2){}
+        };
+        rd.readAsDataURL(e.data);
+      };
+      _lmMR.start(1500);
+    }catch(e){}
+
+  }).catch(function(err){
+    setLmSt('❌ Mic permission denied: '+err.message+'. Please allow microphone access.');
+  });
+}
+
+function stopLiveMic(){
+  _lmActive=false;
+  if(_lmMR&&_lmMR.state!=='inactive'){try{_lmMR.stop();}catch(e){}}
+  if(_lmStream){_lmStream.getTracks().forEach(function(t){t.stop();});}
+  try{var bc=new BroadcastChannel('ds_masjid');bc.postMessage({type:'live_end'});bc.close();}catch(e){}
+  try{localStorage.setItem('ds_live_end',Date.now().toString());}catch(e){}
+  document.getElementById('lmStart').style.display='flex';
+  document.getElementById('lmStop').style.display='none';
+  setLmSt('🎙️ Mic is OFF — Press Mic ON to start Azan');
+}
+function setLmSt(m){var el=document.getElementById('lmSt');if(el)el.innerHTML=m;}
+
+// ---- RECORDING MIC ----
+var _mr=null,_chunks=[],_rtmr=null,_rsec=0,_anl=null,_raf=null,_blob=null;
+document.getElementById('bR').onclick=startRec;
+document.getElementById('bS').onclick=stopRec;
+document.getElementById('bP').onclick=function(){document.getElementById('pAud').play();};
+document.getElementById('bV').onclick=saveRec;
+document.getElementById('delR').onclick=deleteRec;
+
+function startRec(){
+  if(!navigator.mediaDevices){setMs('Microphone not supported. Use Chrome.');return;}
+  navigator.mediaDevices.getUserMedia({audio:true,video:false}).then(function(stream){
+    _chunks=[];_rsec=0;_blob=null;
+    var mt=document.getElementById('micTmr');mt.textContent='0:00';mt.style.display='block';
+    setMs('<span class="rd"></span> Recording… speak clearly');
+    showM('bR',false);showM('bS',true);showM('bP',false);showM('bV',false);
+    document.getElementById('pAud').style.display='none';
+    document.getElementById('micWv').style.display='block';
+    _rtmr=setInterval(function(){_rsec++;var m=Math.floor(_rsec/60),s=_rsec%60;mt.textContent=m+':'+(s<10?'0':'')+s;if(_rsec>=600)stopRec();},1000);
+    try{
+      var ac=new(window.AudioContext||window.webkitAudioContext)();
+      var src=ac.createMediaStreamSource(stream);
+      _anl=ac.createAnalyser();_anl.fftSize=512;src.connect(_anl);drawWave();
+    }catch(e){}
+    var opts={};
+    ['audio/webm;codecs=opus','audio/webm','audio/ogg;codecs=opus','audio/mp4'].forEach(function(tp){if(!opts.mimeType&&MediaRecorder.isTypeSupported(tp))opts={mimeType:tp};});
+    _mr=new MediaRecorder(stream,opts);
+    _mr.ondataavailable=function(e){if(e.data&&e.data.size>0)_chunks.push(e.data);};
+    _mr.onstop=function(){
+      clearInterval(_rtmr);_rtmr=null;
+      if(_raf){cancelAnimationFrame(_raf);_raf=null;}
+      document.getElementById('micWv').style.display='none';document.getElementById('micTmr').style.display='none';
+      _blob=new Blob(_chunks,{type:_mr.mimeType||'audio/webm'});
+      var url=URL.createObjectURL(_blob);
+      var pa=document.getElementById('pAud');pa.src=url;pa.style.display='block';
+      showM('bS',false);showM('bR',true);showM('bP',true);showM('bV',true);
+      setMs('Done. Preview then Save.');
+    };
+    _mr.start(250);
+  }).catch(function(e){setMs('Mic denied: '+e.message);});
+}
+function stopRec(){if(_mr&&_mr.state!=='inactive'){_mr.stream.getTracks().forEach(function(t){t.stop();});_mr.stop();}showM('bS',false);}
+function drawWave(){
+  if(!_anl)return;var cv=document.getElementById('wvC');if(!cv)return;
+  var ctx=cv.getContext('2d'),buf=new Uint8Array(_anl.frequencyBinCount);
+  function fr(){_raf=requestAnimationFrame(fr);_anl.getByteTimeDomainData(buf);ctx.fillStyle='rgba(6,16,26,0.9)';ctx.fillRect(0,0,cv.width,cv.height);ctx.strokeStyle='#C9A84C';ctx.lineWidth=2;ctx.beginPath();var sw=cv.width/buf.length;for(var i=0;i<buf.length;i++){var y=(buf[i]/128)*cv.height/2;i===0?ctx.moveTo(i*sw,y):ctx.lineTo(i*sw,y);}ctx.lineTo(cv.width,cv.height/2);ctx.stroke();}
+  fr();
+}
+function saveRec(){
+  if(!_blob){toast('Nothing to save');return;}
+  var rd=new FileReader();
+  rd.onload=function(e){try{localStorage.setItem(RK,e.target.result);setMs('Saved! User app uses this for Darussalam Local.');loadSavedRec();showM('bV',false);toast('Recording saved');}catch(err){setMs('Storage full — try shorter recording.');}};
+  rd.readAsDataURL(_blob);
+}
+function deleteRec(){if(!confirm('Delete?'))return;try{localStorage.removeItem(RK);}catch(e){}document.getElementById('sbox').style.display='none';document.getElementById('sAud').src='';document.getElementById('pAud').style.display='none';showM('bP',false);showM('bV',false);_blob=null;setMs('Deleted.');toast('Deleted');}
+function loadSavedRec(){try{var s=localStorage.getItem(RK);if(s){document.getElementById('sbox').style.display='block';document.getElementById('sAud').src=s;setMs('A recording is saved and active in the user app.');}}catch(e){}}
+function setMs(m){var el=document.getElementById('micSt');if(el)el.innerHTML=m;}
+function showM(id,vis){var el=document.getElementById(id);if(el)el.style.display=vis?'flex':'none';}
+</script>
+</body>
+</html>
