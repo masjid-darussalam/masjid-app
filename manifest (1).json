@@ -1,0 +1,14 @@
+{
+  "background_color": "rgb(13, 27, 42)",
+  "dir": "ltr",
+  "display": "standalone",
+  "name": "Masjid Darussalam",
+  "orientation": "any",
+  "scope": "/masjid-app/",
+  "short_name": "Masjid DS",
+  "start_url": "/masjid-app/masjid-app-firebase-10.html",
+  "theme_color": "rgb(201, 148, 58)",
+  "description": "Masjid Darussalam - Murud Janjira Prayer Times and Quran",
+  "id": "masjid-darussalam",
+  "lang": "en"
+}
