@@ -2,7 +2,7 @@
   "name": "Masjid Darussalam",
   "short_name": "Masjid DS",
   "description": "Masjid Darussalam - Murud Janjira | Prayer Times, Quran, Duas",
-  "start_url": "./masjid-app-firebase-8.html",
+  "start_url": "./masjid-app-firebase-10.html",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#0D1B2A",
